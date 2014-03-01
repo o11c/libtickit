@@ -407,3 +407,7 @@ size_t tickit_renderbuffer_get_span(TickitRenderBuffer *rb, int line, int startc
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef __cplusplus
+}
+#endif

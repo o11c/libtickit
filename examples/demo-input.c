@@ -87,11 +87,11 @@ static void event(TickitTerm *tt, TickitEventType ev, TickitEvent *args, void *d
       return;
     }
 
-    render_key(tt, args->type, args->str, args->mod);
+    render_key(tt, (TickitKeyEventType)args->type, args->str, args->mod);
     break;
 
   case TICKIT_EV_MOUSE:
-    render_mouse(tt, args->type, args->button, args->line, args->col, args->mod);
+    render_mouse(tt, (TickitMouseEventType)args->type, args->button, args->line, args->col, args->mod);
     break;
   }
 }
@@ -108,7 +108,8 @@ int main(int argc, char *argv[])
 
   tickit_term_set_input_fd(tt, STDIN_FILENO);
   tickit_term_set_output_fd(tt, STDOUT_FILENO);
-  tickit_term_await_started(tt, &(const struct timeval){ .tv_sec = 0, .tv_usec = 50000 });
+  const struct timeval await = (const struct timeval){ .tv_sec = 0, .tv_usec = 50000 };
+  tickit_term_await_started(tt, &await);
 
   tickit_term_setctl_int(tt, TICKIT_TERMCTL_ALTSCREEN, 1);
   tickit_term_setctl_int(tt, TICKIT_TERMCTL_CURSORVIS, 0);
@@ -116,10 +117,10 @@ int main(int argc, char *argv[])
   tickit_term_setctl_int(tt, TICKIT_TERMCTL_KEYPAD_APP, 1);
   tickit_term_clear(tt);
 
-  tickit_term_bind_event(tt, TICKIT_EV_KEY|TICKIT_EV_MOUSE, event, NULL);
+  tickit_term_bind_event(tt, (TickitEventType)(TICKIT_EV_KEY|TICKIT_EV_MOUSE), event, NULL);
 
-  render_key(tt, -1, "", 0);
-  render_mouse(tt, -1, 0, 0, 0, 0);
+  render_key(tt, (TickitKeyEventType)-1, "", 0);
+  render_mouse(tt, (TickitMouseEventType)-1, 0, 0, 0, 0);
 
   signal(SIGINT, sigint);
 
