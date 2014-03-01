@@ -6,8 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 
-struct {
-  char *name;
+static struct {
+  const char *name;
   int  val;
 } colours[] = {
   { "red   ", 1 },
@@ -16,8 +16,8 @@ struct {
   { "yellow", 3 },
 };
 
-struct {
-  char *name;
+static struct {
+  const char *name;
   TickitPenAttr attr;
 } attrs[] = {
   { "bold",          TICKIT_PEN_BOLD },
@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
 
   tickit_term_set_input_fd(tt, STDIN_FILENO);
   tickit_term_set_output_fd(tt, STDOUT_FILENO);
-  tickit_term_await_started(tt, &(const struct timeval){ .tv_sec = 0, .tv_usec = 50000 });
+  const struct timeval await = (const struct timeval){ .tv_sec = 0, .tv_usec = 50000 };
+  tickit_term_await_started(tt, &await);
 
   tickit_term_setctl_int(tt, TICKIT_TERMCTL_ALTSCREEN, 1);
   tickit_term_setctl_int(tt, TICKIT_TERMCTL_CURSORVIS, 0);
